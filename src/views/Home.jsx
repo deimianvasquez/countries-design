@@ -1,7 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 
-//components
-import Countries from '../components/Countries';
+//Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { getCountriesAction } from '../actions/countriesActions';
+
+//Components
+import Country from '../components/Country';
 
 //react-bootstrap
 import {
@@ -12,38 +16,50 @@ import {
 } from 'react-bootstrap';
 
 const Home = () => {
+    //llamamos las ciudades
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        //llamar las cidades cuando el componente este listo 
+        const downloadCountries = () => dispatch(getCountriesAction());
+        downloadCountries();
+    }, []);
+
+
+    //Acceder a los states 
+    const loading = useSelector(state => state.countries.loading);
+    const error = useSelector(state => state.countries.error);
+    const countries = useSelector(state => state.countries.countries);
+
     return (
         <Fragment>
-            <Container>
-                <Row>
-                    <Col xs={12}>
-                        <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Search for a country"
-                            name="search"
-                        />
-                    </Col>
-                    <Col>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                                Filter by Region
-                            </Dropdown.Toggle>
+            {/* si existe un error al consultar la app imprima que no se pudo cargar la api */}
+            {error
+                ?
+                <div className="alert alert-danger">Error al cargar la api, consulte al administrador del sitio</div>
+                :
+                <Fragment>
+                    <Container>
+                        <Row>
+                            {countries.map(country => {
+                                return (
+                                    <Country
+                                        key={country.name}
+                                        flag={country.flag}
+                                        name={country.name}
+                                        population={country.population}
+                                        region={country.region}
+                                        capital={country.capital}
+                                    />
+                                )
+                            })}
+                        </Row>
+                    </Container>
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                       
-                    </Col>
-                    
-                </Row>
-            </Container>
-            <Container>
-                <Row>
-                    <Countries/>
-                </Row>
-            </Container>
+                    {loading ? <div className="mt-5">cargando...</div> : null}
+
+                </Fragment>
+            }
         </Fragment>
     )
 }

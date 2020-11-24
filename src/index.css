@@ -1,8 +1,30 @@
+body{
+    background-color: hsl(207, 26%, 17%) !important;
+    color: hsl(0, 0%, 100%) !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+}
 .borders{
-    border:1px solid red
+    border:0px solid red
 }
 .Menu__nav{
-    border:1px solid green;
+    border:0px solid green;
     display: flex;
     justify-content: space-between;
+}
+.Country__container{
+    border:0px solid green;
+    height: 100%;
+    background-color: hsl(209, 23%, 22%);
+    border-radius: 5px;
+}
+.Country__container > img{
+    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+}
+.Country__container > p{
+    padding: 0px 15px;
+    margin: 10px 0px;
+} 
+.Country__container >h4{
+    margin: 15px 0px;
 }
